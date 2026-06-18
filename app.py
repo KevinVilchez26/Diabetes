@@ -142,13 +142,7 @@ def main():
     else:
         st.sidebar.error("🔴 Conexión: Error en sincronización")
         
-    if st.sidebar.button("🔄 Forzar Sincronización / Recargar"):
-        st.cache_data.clear()
-        if hasattr(st, "rerun"):
-            st.rerun()
-        else:
-            st.experimental_rerun()
-            
+
     st.sidebar.markdown("---")
     
     available_countries = df['pais'].unique().tolist()
