@@ -6,7 +6,7 @@ El sistema está diseñado siguiendo los principios de la **Arquitectura Hexagon
 
 ---
 
-## 🏗️ Diagrama de la Arquitectura y Flujos de Datos
+##  Diagrama de la Arquitectura y Flujos de Datos
 
 El siguiente diagrama detalla cómo se estructuran las capas del software y cómo fluyen las peticiones tanto en condiciones normales (**Flujo Normal ONLINE**) como en condiciones de error de red (**Flujo de Fallback OFFLINE**):
 
@@ -77,7 +77,7 @@ graph TD
 
 ---
 
-## 🛠️ Estructura del Proyecto
+##  Estructura del Proyecto
 
 El código está organizado bajo la estructura modular de Arquitectura Hexagonal:
 
@@ -114,34 +114,6 @@ El código está organizado bajo la estructura modular de Arquitectura Hexagonal
 
 ---
 
-## 🌟 Cumplimiento de la Rúbrica de Evaluación
 
-1. **Capa de Dominio (15%)**: Implementada con dataclasses puras de Python (`src/domain/entities.py` y `src/domain/value_objects.py`) aplicando validaciones inmutables de negocio. Sin imports de infraestructura.
-2. **Puertos (15%)**: Puertos definidos mediante clases abstractas de Python (`abc.ABC` y `@abstractmethod`) bajo lenguaje ubicuo del dominio en `src/ports/`.
-3. **Adaptador de Entrada / UI (10%)**: La aplicación Streamlit (`app.py`) y el script `generate_data.py` actúan únicamente como interfaces gráficas/CLI que llaman a los Casos de Uso compuestos. No contienen lógica de negocio ni dependencias o sentencias SQL directas (`import sqlite3` ha sido removido del frontend).
-4. **Adaptadores de Salida (20%)**: Adaptador HTTP de la API externa y repositorios locales SQLite completamente desacoplados y configurados dinámicamente mediante el patrón *Unit of Work*.
-5. **Mecanismo de Fallback (20%)**: Ante errores de conexión o caídas en la API externa del Banco Mundial, el caso de uso captura de forma transparente `ApiCaidaError` y carga los datos desde la base de datos local SQLite, retornando el estado de conexión para que la UI despliegue un badge de advertencia.
-6. **Inyección de Dependencias (10%)**: Concentrada en `src/composer.py`, permitiendo instanciar y componer los adaptadores hacia los puertos requeridos por los casos de uso sin contaminar el dominio.
-7. **Manejo de Errores (10%)**: Excepciones propias del dominio bien estructuradas, con el manejo visual exclusivo en Streamlit a través de `st.error` y `st.warning`.
 
----
 
-## 🚀 Instalación y Ejecución
-
-### 1. Clonar el repositorio e instalar dependencias
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Generación inicial de datos y CSV (Opcional)
-Puedes correr el script generador de datos, el cual ejecutará el caso de uso hexagonal y poblará la base de datos local SQLite, generando adicionalmente el archivo CSV legible:
-```bash
-python generate_data.py
-```
-
-### 3. Iniciar la aplicación Streamlit
-```bash
-streamlit run app.py
-```
-
-El servidor Streamlit iniciará las migraciones locales automáticamente al conectarse y mostrará el panel interactivo en tu navegador web.
