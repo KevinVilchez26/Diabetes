@@ -9,7 +9,7 @@ class MigrationRunner:
             # Ruta relativa al directorio de persistencia/migraciones
             self.migrations_dir = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
-                "persistence", "migrations"
+                "migrations"
             )
         else:
             self.migrations_dir = migrations_dir

@@ -7,7 +7,7 @@ import base64
 
 from src.composer import get_obtener_datos_diabetes_use_case, get_obtener_logs_auditoria_use_case
 from src.domain.exceptions import DomainError
-from src.adapters.migration_runner import MigrationRunner
+from src.adapters.persistence.migration_runner import MigrationRunner
 
 def get_base64_of_bin_file(bin_file):
     try:

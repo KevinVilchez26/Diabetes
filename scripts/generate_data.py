@@ -1,6 +1,12 @@
+import os
+import sys
 import pandas as pd
+
+# Añadir el directorio raíz al path de Python para poder importar 'src'
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from src.composer import get_obtener_datos_diabetes_use_case
-from src.adapters.migration_runner import MigrationRunner
+from src.adapters.persistence.migration_runner import MigrationRunner
 from src.domain.exceptions import DomainError
 
 def format_large_number(num):
@@ -17,9 +23,11 @@ def format_large_number(num):
     return str(int(num))
 
 def generate_diabetes_data():
-    db_path = "diabetes.db"
+    # Resolver la ruta de la base de datos a la raíz del proyecto
+    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "diabetes.db"))
+    csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "diabetes_data.csv"))
     
-    print("Inicializando la base de datos y ejecutando migraciones...")
+    print(f"Inicializando la base de datos en {db_path} y ejecutando migraciones...")
     try:
         runner = MigrationRunner(db_path)
         runner.run()
@@ -65,8 +73,8 @@ def generate_diabetes_data():
             
             # Omitir la columna interna de codigo_pais para mantener el CSV exactamente idéntico al original
             df_csv = df_final.drop(columns=["codigo_pais"])
-            df_csv.to_csv("diabetes_data.csv", index=False)
-            print("¡Archivo 'diabetes_data.csv' generado con formato ultra-legible con éxito!")
+            df_csv.to_csv(csv_path, index=False)
+            print(f"¡Archivo '{csv_path}' generado con formato ultra-legible con éxito!")
         else:
             print("El DataFrame de salida está vacío.")
     except DomainError as de:

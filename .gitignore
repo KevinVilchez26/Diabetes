@@ -5,3 +5,7 @@ __pycache__/
 .pytest_cache/
 .vscode/
 .idea/
+
+# Database and data files
+diabetes.db
+diabetes_data.csv
