@@ -132,13 +132,13 @@ El código está organizado bajo la estructura modular de Arquitectura Hexagonal
 
 ---
 
-## 🗄️ Base de Datos (SQLite)
+##  Base de Datos (SQLite)
 
 El proyecto utiliza **SQLite** como motor de base de datos local para almacenar los registros de prevalencia de diabetes, países y el historial de auditoría de triggers.
 
 ### ¿Dónde se encuentra la Base de Datos?
 El archivo de la base de datos se almacena localmente en el directorio raíz del proyecto con el nombre:
-👉 **`diabetes.db`** (su ruta absoluta es `c:\DOCUMENTOS CLASES 4TO\Administración de Sistemas de Información\Diabetes\Diabetes\diabetes.db`).
+ **`diabetes.db`** (su ruta absoluta es `c:\DOCUMENTOS CLASES 4TO\Administración de Sistemas de Información\Diabetes\Diabetes\diabetes.db`).
 
 ### Ciclo de Vida y Migración Automática
 * **Ignorada en Git**: Para evitar conflictos y subidas innecesarias de archivos locales dinámicos, `diabetes.db` está agregada en el archivo `.gitignore` y **no se almacena en el repositorio de GitHub**.
