@@ -13,3 +13,8 @@ class ApiCaidaError(DomainError):
 class DatosNoEncontradosError(DomainError):
     """Excepción lanzada cuando una consulta a la persistencia no retorna resultados esperados."""
     pass
+
+class DatabaseError(DomainError):
+    """Excepción lanzada cuando hay un error crítico en la base de datos o almacenamiento local."""
+    pass
+

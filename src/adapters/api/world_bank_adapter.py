@@ -4,9 +4,9 @@ from src.ports.api import DiabetesApiPort
 from src.domain.exceptions import ApiCaidaError
 
 class WorldBankApiAdapter(DiabetesApiPort):
-    def __init__(self):
-        self.base_url = "http://api.worldbank.org/v2"
-        self.countries = "NIC;CRI;HND;GTM;SLV;PAN"
+    def __init__(self, base_url: str = "http://api.worldbank.org/v2", countries: str = "NIC;CRI;HND;GTM;SLV;PAN"):
+        self.base_url = base_url
+        self.countries = countries
 
     def fetch_data(self) -> List[dict]:
         try:

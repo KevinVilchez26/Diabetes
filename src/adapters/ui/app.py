@@ -7,7 +7,7 @@ import base64
 
 from src.composer import get_obtener_datos_diabetes_use_case, get_obtener_logs_auditoria_use_case
 from src.domain.exceptions import DomainError
-from src.adapters.persistence.migration_runner import MigrationRunner
+
 
 def get_base64_of_bin_file(bin_file):
     try:
@@ -70,14 +70,7 @@ st.markdown(f"""
 @st.cache_data(show_spinner="Sincronizando con la API del Banco Mundial...")
 def load_data(db_path="diabetes.db"):
     try:
-        # Aseguramos que la base de datos local y su esquema estén creados/actualizados
-        runner = MigrationRunner(db_path)
-        runner.run()
-    except Exception as e:
-        st.error(f"Error al ejecutar las migraciones de base de datos: {e}")
-
-    try:
-        # Obtener el caso de uso compuesto
+        # Obtener el caso de uso compuesto (el composer asegura que las migraciones corran)
         use_case = get_obtener_datos_diabetes_use_case(db_path)
         registros, paises, status = use_case.execute()
 
@@ -296,7 +289,7 @@ def main():
     st.markdown("---")
     st.subheader("Administración del Motor de Datos (Offline)")
     
-    with st.expander("🛠️ Ver Diagnóstico e Historial de Auditoría SQLite (Triggers)"):
+    with st.expander(" Ver Diagnóstico e Historial de Auditoría SQLite (Triggers)"):
         st.markdown("Esta sección interactúa a través del caso de uso de auditoría del dominio para comprobar los logs del sistema de base de datos.")
         
         try:

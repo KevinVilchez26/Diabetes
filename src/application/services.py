@@ -1,15 +1,17 @@
 from typing import List, Tuple, Dict
 from src.ports.api import DiabetesApiPort
 from src.ports.uow import UnitOfWorkPort
+from src.ports.event_publisher import EventPublisherPort
 from src.domain.exceptions import ApiCaidaError, DatosNoEncontradosError, ValidationError
 from src.domain.entities import Pais, RegistroDiabetes
 from src.domain.value_objects import Year, Prevalence, Population, Percentage, CountryCode
-from src.domain.events import EventDispatcher, RegistroCreado, PrevalenciaActualizada
+from src.domain.events import RegistroCreado, PrevalenciaActualizada
 
 class ObtenerDatosDiabetesUseCase:
-    def __init__(self, api: DiabetesApiPort, uow: UnitOfWorkPort):
+    def __init__(self, api: DiabetesApiPort, uow: UnitOfWorkPort, event_publisher: EventPublisherPort):
         self.api = api
         self.uow = uow
+        self.event_publisher = event_publisher
 
     def execute(self) -> Tuple[List[RegistroDiabetes], List[Pais], str]:
         """
@@ -60,7 +62,7 @@ class ObtenerDatosDiabetesUseCase:
                             existing_record.actualizar_mediciones(prevalencia, poblacion, gasto)
                             self.uow.registros.save(existing_record)
                             # Disparar evento de dominio
-                            EventDispatcher.dispatch(PrevalenciaActualizada(
+                            self.event_publisher.publish(PrevalenciaActualizada(
                                 registro_id=existing_record.id,
                                 pais_id=pais_entidad.id,
                                 ano=ano.value,
@@ -77,7 +79,7 @@ class ObtenerDatosDiabetesUseCase:
                         )
                         self.uow.registros.save(nuevo_registro)
                         # Disparar evento de dominio
-                        EventDispatcher.dispatch(RegistroCreado(
+                        self.event_publisher.publish(RegistroCreado(
                             registro_id=nuevo_registro.id,
                             pais_id=pais_entidad.id,
                             ano=ano.value,
@@ -119,5 +121,9 @@ class ObtenerLogsAuditoriaUseCase:
     def execute(self, limit: int = 10) -> Tuple[List[dict], dict]:
         with self.uow:
             logs = self.uow.logs.list_logs(limit)
-            stats = self.uow.logs.get_stats()
+            stats = {
+                "total_paises": self.uow.paises.count(),
+                "total_registros": self.uow.registros.count(),
+                "total_logs": self.uow.logs.count()
+            }
             return logs, stats
